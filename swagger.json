@@ -345,9 +345,21 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 12
+              "type": "string",
+              "enum": [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+              ]
             }
           }
         ],
@@ -456,11 +468,23 @@
             "name": "month",
             "in": "query",
             "required": true,
-            "description": "Selected month from 1 to 12",
+            "description": "Selected month",
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 12
+              "type": "string",
+              "enum": [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+              ]
             }
           }
         ],
@@ -698,9 +722,21 @@
             "maximum": 31
           },
           "month": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 12
+            "type": "string",
+            "enum": [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December"
+            ]
           },
           "percent": {
             "type": "number"
@@ -749,9 +785,21 @@
             "maximum": 31
           },
           "month": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 12
+            "type": "string",
+            "enum": [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December"
+            ]
           },
           "percent": {
             "type": "number"
@@ -769,9 +817,22 @@
               "maximum": 31
             },
             "month": {
-              "type": "integer",
-              "description": "Date in the format 'day of month'",
-              "example": "10"
+              "type": "string",
+              "enum": [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+              ],
+              "example": "June"
             },
             "waterVolume": {
               "type": "number",
@@ -791,7 +852,6 @@
           }
         }
       }
-     
     }
   }
 }
