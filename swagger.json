@@ -1,0 +1,857 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "2.0.2",
+    "title": "Swagger for water tracking",
+    "description": "Showing off swagger-ui-express",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "consumes": ["application/json", "multipart/form-data"],
+  "produces": ["application/json"],
+  "servers": [{ "url": "http://localhost:8000" }],
+  "tags": [
+    {
+      "name": "UserAuth",
+      "description": "Registration and authentication endpoints"
+    },
+    {
+      "name": "User",
+      "description": "User's endpoints"
+    },
+    { "name": "WaterToday", "description": "WaterToday-related endpoints" },
+    { "name": "WaterMonth", "description": "WaterMonth-related endpoints" }
+  ],
+  "paths": {
+    "/user/register": {
+      "post": {
+        "tags": ["UserAuth"],
+        "summary": "UserAuth registration",
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": ["UserAuth"],
+        "summary": "UserAuth login",
+        "parameters": [],
+        "requestBody": {
+          "description": "Login credentials",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user/logout": {
+      "post": {
+        "tags": ["UserAuth"],
+        "summary": "UserAuth logout",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful logout",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user/avatar": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Add or update user avatar",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "User avatar image",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "User avatar image file"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvatarResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user/{userId}": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get user information",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfoResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          }
+        }
+      },
+      "patch": {
+        "tags": ["User"],
+        "summary": "Update user information",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated user information",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfoResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user/waterNorm": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Update user's daily water norm goal",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated water norm goal",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaterNormUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfoResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad request (invalid water consumption value)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/water/today": {
+      "post": {
+        "tags": ["WaterToday"],
+        "summary": "Save water consumption information",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Water consumption data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaterTodaySaveRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Water consumption record saved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterConsumptionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid water consumption data)",
+            "content": {}
+          }
+        }
+      },
+      "get": {
+        "tags": ["WaterToday"],
+        "summary": "Get water consumption information for today",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 31
+            }
+          },
+          {
+            "name": "month",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+              ]
+            }
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of water consumption information for today",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterTodayResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/water/today/{recordId}": {
+      "patch": {
+        "tags": ["WaterToday"],
+        "summary": "Edit water consumption record",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "recordId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the water consumption record",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated water consumption data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaterTodayUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Water consumption record updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterTodayResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid water consumption data)",
+            "content": {}
+          },
+          "404": {
+            "description": "Water consumption record not found",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["WaterToday"],
+        "summary": "Delete water consumption record",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "recordId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the water consumption record",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Water consumption record deleted successfully",
+            "content": {}
+          },
+          "404": {
+            "description": "Water consumption record not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/water/month": {
+      "get": {
+        "tags": ["WaterMonth"],
+        "summary": "Get water consumption information for each day in the selected month",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "required": true,
+            "description": "Selected month",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of water consumption information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaterMonthResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid parameters)",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "format": "text",
+            "minLength": 1,
+            "maxLength": 32,
+            "example": "user"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "minLength": 8,
+            "maxLength": 64,
+            "example": "qwerty123"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            },
+            "userId": {
+              "type": "string",
+              "description": "User's id",
+              "example": "6566f0735775c3f350f806d3"
+            }
+          }
+        },
+        "example": [
+          {
+            "name": "user1",
+            "email": "1@gmail.com",
+            "userId": "6566f0735775c3f350f806d3"
+          },
+          {
+            "name": "user2",
+            "email": "2@gmail.com",
+            "userId": "6582c1a92e7ec277b3f611f5"
+          }
+        ]
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "minLength": 8,
+            "maxLength": 64,
+            "example": "6566f0735775c3f350f806d3"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "JWT token for authentication"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "description": "User's email address"
+              }
+            },
+            "required": ["name", "email"]
+          }
+        },
+        "required": ["token", "user"]
+      },
+
+      "securitySchemes": {
+        "Bearer": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      },
+      "AvatarResponse": {
+        "type": "object",
+        "properties": {
+          "avatarUrl": {
+            "type": "string",
+            "description": "URL to the user's avatar"
+          }
+        }
+      },
+      "UserInfoRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Updated user's name",
+            "minLength": 1,
+            "maxLength": 32
+          },
+          "email": {
+            "type": "string",
+            "description": "Updated user's email",
+            "format": "email"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "Updated URL to the user's avatar"
+          },
+          "gender": {
+            "type": "string",
+            "description": "Updated user's gender",
+            "enum": ["man", "woman"]
+          },
+          "waterRate": {
+            "type": "number",
+            "description": "Updated user's daily water consumption goal",
+            "minimum": 0,
+            "maximum": 15000,
+            "example": 1500
+          }
+        }
+      },
+      "UserInfoResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "description": "URL to the user's avatar"
+          },
+          "gender": {
+            "type": "string",
+            "description": "Updated user's gender",
+            "enum": ["man", "woman"]
+          },
+          "waterRate": {
+            "type": "number",
+            "description": "Updated user's daily water consumption goal",
+            "minimum": 0,
+            "maximum": 15000,
+            "example": 1500
+          }
+        }
+      },
+      "WaterNormUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "waterRate": {
+            "type": "number",
+            "description": "Updated daily water consumption goal for the user",
+            "minimum": 0,
+            "maximum": 15000
+          },
+          "gender": {
+            "type": "string",
+            "description": "Updated user's gender",
+            "enum": ["man", "woman"]
+          }
+        }
+      },
+      "WaterTodaySaveRequest": {
+        "type": "object",
+        "properties": {
+          "waterVolume": {
+            "type": "number",
+            "description": "Amount of water consumed in milliliters",
+            "minimum": 0,
+            "maximum": 5000
+          },
+          "time": {
+            "type": "string",
+            "description": "Time when water was consumed"
+          },
+          "date": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 31
+          },
+          "month": {
+            "type": "string",
+            "enum": [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December"
+            ]
+          },
+          "percent": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "userId",
+          "waterVolume",
+          "time",
+          "date",
+          "month",
+          "percent"
+        ]
+      },
+      "WaterTodayUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "waterVolume": {
+            "type": "number",
+            "description": "Updated amount of water consumed in milliliters",
+            "minimum": 0,
+            "maximum": 5000
+          },
+          "time": {
+            "type": "string",
+            "description": "Updated time when water was consumed"
+          }
+        }
+      },
+      "WaterTodayResponse": {
+        "type": "object",
+        "properties": {
+          "waterVolume": {
+            "type": "number",
+            "description": "Amount of water consumed in milliliters",
+            "minimum": 0,
+            "maximum": 5000
+          },
+          "time": {
+            "type": "string",
+            "description": "Time when water was consumed"
+          },
+          "date": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 31
+          },
+          "month": {
+            "type": "string",
+            "enum": [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December"
+            ]
+          },
+          "percent": {
+            "type": "number"
+          }
+        }
+      },
+      "WaterMonthResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 31
+            },
+            "month": {
+              "type": "string",
+              "enum": [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+              ],
+              "example": "June"
+            },
+            "waterVolume": {
+              "type": "number",
+              "description": "Daily norm of water intake in ml",
+              "example": 1.8
+            },
+            "percent": {
+              "type": "number",
+              "description": "Percentage of water consumed from the daily norm",
+              "example": 60
+            },
+            "numOfWaterRecords": {
+              "type": "integer",
+              "description": "Number of water intake records for the day",
+              "example": 6
+            }
+          }
+        }
+      }
+    }
+  }
+}
