@@ -1,10 +1,10 @@
-const express = require('express');
-const logger = require('morgan');
-const cors = require('cors');
-require("dotenv").config();
+import express from "express";
+import logger from "morgan";
+import cors from "cors";
+import "dotenv/config";
 
-// const consumedWaterRouter = require('./routes/api/consumedWater');
-// const userRouter = require("./routes/api/users");
+import consumedWaterRouter from './routes/api/consumedWater_router.js';
+// import userRouter from "./routes/api/users";
 
 const app = express()
 
@@ -18,7 +18,7 @@ app.use(express.json())
 app.use(express.static("public"));
 
 // app.use("/users", userRouter);
-// app.use("/consumedWater", consumedWaterRouter);
+app.use("/consumedWater", consumedWaterRouter);
 
 app.use((_, res) => {
   res.status(404).json({ message: "Not found" });
@@ -28,4 +28,4 @@ app.use((err, _, res) => {
   res.status(500).json({ message: err.message });
 });
 
-module.exports = app
+export default app
