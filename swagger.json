@@ -325,7 +325,9 @@
             "content": {}
           }
         }
-      },
+      }
+    },
+    "/water/today/{day}/{month}": {
       "get": {
         "tags": ["WaterToday"],
         "summary": "Get water consumption information for today",
@@ -383,7 +385,7 @@
         }
       }
     },
-    "/water/today/{recordId}": {
+    "/water/today/{consumedWaterId}": {
       "patch": {
         "tags": ["WaterToday"],
         "summary": "Edit water consumption record",
@@ -458,7 +460,7 @@
         }
       }
     },
-    "/water/month": {
+    "/water/month/{month}": {
       "get": {
         "tags": ["WaterMonth"],
         "summary": "Get water consumption information for each day in the selected month",
@@ -683,7 +685,7 @@
             "description": "Updated user's daily water consumption goal",
             "minimum": 0,
             "maximum": 15000,
-            "example": 1500
+            "example": 2000
           }
         }
       },
