@@ -1,5 +1,5 @@
-const app = require('./app');
-const connectDb = require('./db/connection')
+import app from './app.js';
+import connectDb from './db/connection.js'
 
 const { PORT } = process.env;
 const startServer = async () => {

@@ -1,12 +1,10 @@
 import { HttpError } from "../helpers/index.js";
 
-const isEmptyBody = async(req, res, next)=> {
+export const isEmptyBody = (req, res, next) => {
     const keys = Object.keys(req.body);
-
-    if(!keys.length) {
-        return next(HttpError(400, "Body must have fields"))
+    if (!keys.length) {
+        return next(HttpError(400, "missing fields"))
     }
     next();
-}
-  
-  export default isEmptyBody;
+};
+
