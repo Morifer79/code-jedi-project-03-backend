@@ -2,7 +2,7 @@ import express from "express";
 import userController from "../../controller/auth-controllers.js"
 import {validaterBody} from "../../decorators/index.js";
 import {authenticate, isEmptyBody,upload} from "../../middlewares/index.js";
-import {userInfoSchema, userUpdateSchema, userNormWaterSchema, userLoginSchema, userRegisterForm} from "../../models/User.js";
+import {userInfoSchema, userUpdateSchema, userNormWaterSchema, userLoginSchema, userRegisterForm} from "../../db/models/User.js";
 
 
 const userRouter = express.Router();
