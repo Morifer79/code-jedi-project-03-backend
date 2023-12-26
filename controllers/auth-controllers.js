@@ -1,4 +1,4 @@
-import User from "../models/User.js";
+import User from "../db/models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
@@ -7,7 +7,7 @@ import fs from "fs/promises";
 import path from "path";
 import Jimp from 'jimp';
 import { nanoid } from "nanoid";
-import { crtlWrapper } from "../decorators/index.js";
+import {ctrlWrapper}  from "../decorators/index.js";
 import { HttpError, sendEmail } from "../helpers/index.js";
 const { JWT_SECRET, BASE_URL } = process.env;
 
@@ -139,11 +139,11 @@ const updateWaterNorm = async (req, res) => {
   }
 
   export default {
-    register: crtlWrapper(register),
-    login: crtlWrapper(login),
-    logout: crtlWrapper(logout),
-    updateAvatar: crtlWrapper(updateAvatar),
-    currentUser: crtlWrapper(currentUser),
-    updateUser: crtlWrapper(updateUser),
-    updateWaterNorm: crtlWrapper(updateWaterNorm)
+    register: ctrlWrapper(register),
+    login: ctrlWrapper(login),
+    logout: ctrlWrapper(logout),
+    updateAvatar: ctrlWrapper(updateAvatar),
+    currentUser: ctrlWrapper(currentUser),
+    updateUser: ctrlWrapper(updateUser),
+    updateWaterNorm: ctrlWrapper(updateWaterNorm)
   };

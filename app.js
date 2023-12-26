@@ -4,11 +4,11 @@ import logger from 'morgan';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import fs from 'fs';
-import waterRouter from "./routes/api/water_router.js";
-import userRouter from "./routes/api/user_router.js";
+// import waterRouter from "./routes/api/water_router.js";
+// import userRouter from "./routes/api/user_router.js";
 
 import consumedWaterRouter from './routes/api/consumedWater_router.js';
-// import userRouter from "./routes/api/users";
+import userRouter from "./routes/api/users.js";
 
 const swaggerJson = JSON.parse(
   fs.readFileSync(`./swagger.json`)
@@ -28,11 +28,9 @@ app.use(
   swaggerUi.setup(swaggerJson)
 );
 
-// app.use('/user', userRouter);
-// app.use('/water', waterRouter);
 
 
-// app.use("/users", userRouter);
+app.use("/users", userRouter);
 app.use("/consumedWater", consumedWaterRouter);
 
 

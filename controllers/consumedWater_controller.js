@@ -1,12 +1,12 @@
 import { HttpError } from "../helpers/index.js";
-import { ctrlWrapper } from "../decorator/ctrWrapper.js";
+import { ctrlWrapper }  from "../decorators/index.js";
 import { consumedWater } from "../db/models/consumedWater.js";
 
 const getAllСonsumedWaterToday = async (req, res) => {
   const { day, month } = req.params;
   console.log(day);
   console.log(month);
-  // const { _id: owner, month, date } = req.user;
+  const { _id: owner} = req.user;
   const allWaterList = await consumedWater.find({ date: `${day}`, month:`${month}`
 }, "amount time ")
   
