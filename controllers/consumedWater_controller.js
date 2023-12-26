@@ -6,7 +6,7 @@ const getAllСonsumedWaterToday = async (req, res) => {
   const { day, month } = req.params;
   console.log(day);
   console.log(month);
-  // const { _id: owner, month, date } = req.user;
+  const { _id: owner} = req.user;
   const allWaterList = await consumedWater.find({ date: `${day}`, month:`${month}`
 }, "amount time ")
   
