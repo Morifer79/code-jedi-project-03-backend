@@ -1,2 +1,2 @@
-export {default as crtlWrapper} from "./crtlWrapper.js";
-export {default as validaterBody} from "./validaterBody.js";
+export {default as ctrlWrapper} from "./crtlWrapper.js";
+export {default as validateBody} from "./validateBody.js";
