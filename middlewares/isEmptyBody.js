@@ -6,4 +6,5 @@ export const isEmptyBody = (req, res, next) => {
         return next(HttpError(400, "missing fields"))
     }
     next();
-}
+};
+
