@@ -1,5 +1,5 @@
 import { HttpError } from "../helpers/index.js";
-import { ctrlWrapper } from "../decorator/ctrWrapper.js";
+import { ctrlWrapper }  from "../decorators/index.js";
 import { consumedWater } from "../db/models/consumedWater.js";
 
 const getAllСonsumedWaterToday = async (req, res) => {
