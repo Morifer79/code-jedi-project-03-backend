@@ -9,7 +9,6 @@ const userSchema = new Schema(
     {
     username: {
         type: String,
-        required: true,
     },
     email: {
         type: String,
@@ -26,6 +25,10 @@ const userSchema = new Schema(
         enum : sex,
         default: "mail",
     },
+    waterRate: {
+        type: Number,
+        default: 0
+      },
     token: String,
     avatarURL: String,
     verify: {
@@ -48,7 +51,7 @@ userSchema.post("findOneAndUpdate", handleSaveError);
 const User = model("user", userSchema);
 
 
-export const userRegisterForm = Joi.object({
+export const authRegisterForm = Joi.object({
     name: Joi.string().min(1).max(32).required(),
     password: Joi.string().min(8).max(64).required(),
     email: Joi.string().pattern(emailRegexp).required(),
@@ -57,7 +60,7 @@ export const userRegisterForm = Joi.object({
     token: Joi.string(),
   });
   
-  export const userLoginSchema = Joi.object({
+  export const authLoginSchema = Joi.object({
       password: Joi.string().min(8).max(64).required(),
       email: Joi.string().pattern(emailRegexp).required(),
       token: Joi.string(),
