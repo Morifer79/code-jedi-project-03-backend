@@ -7,7 +7,7 @@ const getAllСonsumedWaterToday = async (req, res) => {
   console.log(day);
   console.log(month);
   const { _id: owner} = req.user;
-  const allWaterList = await consumedWater.find({ date: `${day}`, month:`${month}`
+  st = await consumedWater.find({owner:`${owner}`, date: `${day}`, month:`${month}`
 }, "amount time ")
   
   res.json(allWaterList);
@@ -15,32 +15,50 @@ const getAllСonsumedWaterToday = async (req, res) => {
 
 
 const getAllСonsumedWaterMonth = async (req, res) => {
-  const {month } = req.params;
-  // const { _id: owner, month } = req.user;
-  const allСonsumedWaterList = await consumedWater. aggregate([
+  const { month } = req.params;
+  const { _id: owner } = req.user;
+  const allСonsumedWaterList = await consumedWater.aggregate([
     {
+      $match: { month: `${month}`, owner:`${owner}` }
+    },
+  
+    {
+       
       $group: {
-        _id: {month:`${month}`},
+        _id: "$date",
         totalProcent: { $sum: "$percent" },
         count: { $sum: 1 }
         
-    }}
+      },
+     
+    },
+    {
+      $project: {
+        _id:`${owner}`,
+        month: `${month}`, 
+        date:"$_id",
+        totalProcent: "$totalProcent",
+        numOfWaterRecords: "$count"
+      }
+    },
+    
+    
+    
 ]);
   res.json(allСonsumedWaterList);
 }
 
 const addСonsumedWater = async (req, res) => {
-//   const { _id: owner } = req.user;
-    const newСonsumedWater = await consumedWater.create({ ...req.body });
+const { _id: owner } = req.user;
+    const newСonsumedWater = await consumedWater.create({ ...req.body, owner });
   res.status(201).json(newСonsumedWater);
 }
 
 const updateСonsumedWaterId = async (req, res) => {
   
     const { consumedWaterId } = req.params;
-    console.log(consumedWaterId);
-//   const { _id: owner } = req.user;
-  const updateСonsumedWater = await consumedWater.findByIdAndUpdate( consumedWaterId, req.body);
+     const { _id: owner } = req.user;
+  const updateСonsumedWater = await consumedWater.findByIdAndUpdate({ _id:consumedWaterId, owner }, req.body);
   if (!updateСonsumedWater) {
     throw HttpError(404, `Water record with id=${consumedWaterId} not found`);
   }
@@ -50,8 +68,8 @@ const updateСonsumedWaterId = async (req, res) => {
 
 const deleteСonsumedWaterId = async (req, res) => {
   const { consumedWaterId } = req.params;
-  // const { _id: owner } = req.user;
-  const removeСonsumedWaterRecord = await consumedWater.findOneAndDelete({ _id: consumedWaterId })
+  const { _id: owner } = req.user;
+  const removeСonsumedWaterRecord = await consumedWater.findOneAndDelete({ _id: consumedWaterId, owner })
   if (!removeСonsumedWaterRecord) {
     throw HttpError(404, `Water record with id=${consumedWaterId} not found`);
   }

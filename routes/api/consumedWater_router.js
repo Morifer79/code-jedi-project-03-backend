@@ -4,11 +4,11 @@ import { isEmptyBody } from "../../middlewares/index.js";
 import { isValidId } from "../../middlewares/isValidId.js";
 import  validateBody  from "../../decorators/validateBody.js";
 import { addConsumedWaterSchema, updateConsumedWaterSchema } from "../../db/models/consumedWater.js"
-// import authenticate from "../../middlewares/authenticate.js";
+import authenticate from "../../middlewares/authenticate.js";
 
 const consumedWaterRouter = express.Router();
 
-// waterRouter.use(authenticate);
+ consumedWaterRouter.use(authenticate);
 
 consumedWaterRouter.get('/today/:day/:month', consumedWater_controller.getAllСonsumedWaterToday);
 
