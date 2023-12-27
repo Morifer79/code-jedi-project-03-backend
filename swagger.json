@@ -114,6 +114,77 @@
         }
       }
     },
+    "/verify/{verificationToken}": {
+      "get": {
+        "tags": ["UserAuth"],
+        "summary": "Verify user with the given verification token",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "verificationToken",
+            "in": "path",
+            "required": true,
+            "description": "Token used for user verification",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verification successful",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Verification token not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/verify": {
+      "post": {
+        "tags": ["UserAuth"],
+        "summary": "Request user verification",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Request body containing user information for verification",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "verificationToken": {
+                  "type": "string",
+                  "description": "Verification token received by the user"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verification request successful",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found or invalid verification token",
+            "content": {}
+          }
+        }
+      }
+    },
+
     "/user/avatar": {
       "patch": {
         "tags": ["User"],
@@ -235,6 +306,54 @@
           },
           "404": {
             "description": "User not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user/changePassword": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "Change user's password",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Request body containing the new password",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "password": {
+                    "type": "string",
+                    "description": "User's password",
+                    "minLength": 8,
+                    "maxLength": 64,
+                    "example": "qwerty123"
+                  }
+                }
+              }
+            }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Password changed successful",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad request (invalid password)",
             "content": {}
           }
         }
@@ -610,7 +729,6 @@
         },
         "required": ["token", "user"]
       },
-
       "securitySchemes": {
         "Bearer": {
           "type": "http",
@@ -653,9 +771,9 @@
           "waterRate": {
             "type": "number",
             "description": "Updated user's daily water consumption goal",
-            "minimum": 0,
+            "minimum": 1,
             "maximum": 15000,
-            "example": 1500
+            "example": 2000
           }
         }
       },
@@ -697,11 +815,6 @@
             "description": "Updated daily water consumption goal for the user",
             "minimum": 0,
             "maximum": 15000
-          },
-          "gender": {
-            "type": "string",
-            "description": "Updated user's gender",
-            "enum": ["man", "woman"]
           }
         }
       },
