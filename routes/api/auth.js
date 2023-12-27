@@ -2,7 +2,7 @@ import express from "express";
 import authController from "../../controllers/auth-controllers.js"
 import {validateBody} from "../../decorators/index.js";
 import {authenticate, isEmptyBody} from "../../middlewares/index.js";
-import { authLoginSchema, authRegisterForm} from "../../db/models/User.js";
+import { authLoginSchema, authRegisterForm, userEmailSchema} from "../../db/models/User.js";
 
 
 const authRouter = express.Router();
@@ -12,5 +12,10 @@ authRouter.post("/register", isEmptyBody, validateBody(authRegisterForm), authCo
 authRouter.post("/login", isEmptyBody, validateBody(authLoginSchema), authController.login);
 
 authRouter.post("/logout", authenticate, authController.logout);
+
+authRouter.get("/verify/:verificationToken", authController.verify);
+
+authRouter.post("/verify", isEmptyBody, validateBody(userEmailSchema), authController.resendVarify)
+
 
 export default  authRouter;
