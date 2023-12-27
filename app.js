@@ -9,6 +9,8 @@ import fs from 'fs';
 
 import consumedWaterRouter from './routes/api/consumedWater_router.js';
 import userRouter from "./routes/api/users.js";
+import authRouter from "./routes/api/auth.js";
+
 
 const swaggerJson = JSON.parse(
   fs.readFileSync(`./swagger.json`)
@@ -31,6 +33,7 @@ app.use(
 
 
 app.use("/users", userRouter);
+app.use("/auth", authRouter);
 app.use("/consumedWater", consumedWaterRouter);
 
 
