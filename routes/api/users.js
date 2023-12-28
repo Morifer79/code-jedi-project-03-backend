@@ -16,8 +16,12 @@ userRouter.get("/:userId", authenticate, validateBody(userInfoSchema), userContr
 
 userRouter.patch("/:userId", authenticate,isEmptyBody, validateBody(userUpdateSchema), userController.updateUser);
 
-userRouter.patch("/waterNorm", authenticate, isEmptyBody, validateBody(userNormWaterSchema), userController.updateWaterNorm);
+userRouter.patch("/waterRate", authenticate, isEmptyBody, validateBody(userNormWaterSchema), userController.updateWaterNorm);
 
-userRouter.patch("/changePassword", authenticate, isEmptyBody, validateBody(userChangePasswordSchema), userController.changePassword);
+userRouter.patch("/:userId/changePassword", authenticate, isEmptyBody, validateBody(userChangePasswordSchema), userController.changePassword);
+
+userRouter.post("/forgotPassword", isEmptyBody, userController.forgotPassword);
+
+userRouter.post("/resetPassword/:forgotPasswordToken", isEmptyBody, validateBody(userChangePasswordSchema), userController.resetPassword);
 
 export default userRouter;

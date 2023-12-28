@@ -11,21 +11,21 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "https://water-tracker-back-end.onrender.com/" }],
+  "servers": [{ "url": "http://localhost:8000" }],
   "tags": [
     {
       "name": "UserAuth",
       "description": "Registration and authentication endpoints"
     },
     {
-      "name": "User",
+      "name": "Users",
       "description": "User's endpoints"
     },
     { "name": "WaterToday", "description": "WaterToday-related endpoints" },
     { "name": "WaterMonth", "description": "WaterMonth-related endpoints" }
   ],
   "paths": {
-    "/user/register": {
+    "/users/register": {
       "post": {
         "tags": ["UserAuth"],
         "summary": "UserAuth registration",
@@ -63,7 +63,7 @@
         }
       }
     },
-    "/user/login": {
+    "/users/login": {
       "post": {
         "tags": ["UserAuth"],
         "summary": "UserAuth login",
@@ -97,7 +97,7 @@
         }
       }
     },
-    "/user/logout": {
+    "/users/logout": {
       "post": {
         "tags": ["UserAuth"],
         "summary": "UserAuth logout",
@@ -114,80 +114,9 @@
         }
       }
     },
-    "/verify/{verificationToken}": {
-      "get": {
-        "tags": ["UserAuth"],
-        "summary": "Verify user with the given verification token",
-        "security": [{ "Bearer": [] }],
-        "parameters": [
-          {
-            "name": "verificationToken",
-            "in": "path",
-            "required": true,
-            "description": "Token used for user verification",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Verification successful",
-            "content": {}
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {}
-          },
-          "404": {
-            "description": "Verification token not found",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/verify": {
-      "post": {
-        "tags": ["UserAuth"],
-        "summary": "Request user verification",
-        "security": [{ "Bearer": [] }],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "description": "Request body containing user information for verification",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "verificationToken": {
-                  "type": "string",
-                  "description": "Verification token received by the user"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Verification request successful",
-            "content": {}
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {}
-          },
-          "404": {
-            "description": "User not found or invalid verification token",
-            "content": {}
-          }
-        }
-      }
-    },
-
-    "/user/avatar": {
+    "/users/avatar": {
       "patch": {
-        "tags": ["User"],
+        "tags": ["Users"],
         "summary": "Add or update user avatar",
         "security": [{ "Bearer": [] }],
         "requestBody": {
@@ -226,9 +155,9 @@
         }
       }
     },
-    "/user/{userId}": {
+    "/users/{userId}": {
       "get": {
-        "tags": ["User"],
+        "tags": ["Users"],
         "summary": "Get user information",
         "parameters": [
           {
@@ -311,9 +240,9 @@
         }
       }
     },
-    "/user/changePassword": {
+    "/users/changePassword": {
       "patch": {
-        "tags": ["User"],
+        "tags": ["Users"],
         "summary": "Change user's password",
         "security": [{ "Bearer": [] }],
         "parameters": [
@@ -359,9 +288,99 @@
         }
       }
     },
-    "/user/waterNorm": {
+    "/users/forgotPassword": {
       "patch": {
-        "tags": ["User"],
+        "tags": ["Users"],
+        "summary": "Send forgot password email",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Request body containing the new password",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "description": "User's email"
+                }
+              }
+            }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Please, check your email",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad request (invalid password)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/resetPassword/{forgotPasswordToken}": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Change user's password",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Request body containing the new password",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "password": {
+                    "type": "string",
+                    "description": "User's password",
+                    "minLength": 8,
+                    "maxLength": 64,
+                    "example": "qwerty123"
+                  }
+                }
+              }
+            }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Password changed successful",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad request (invalid password)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/waterRate": {
+      "patch": {
+        "tags": ["Users"],
         "summary": "Update user's daily water norm goal",
         "security": [{ "Bearer": [] }],
         "parameters": [

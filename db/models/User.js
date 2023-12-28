@@ -2,12 +2,12 @@ import Joi from "joi";
 import { Schema, model } from "mongoose";
 import { handleSaveError, preUpdate } from "./hooks.js";
 
-const sex = ["mail", "femail"];
+const sex = ["man", "woman"];
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = new Schema(
     {
-        username: {
+        name: {
             type: String,
         },
         email: {
@@ -23,23 +23,25 @@ const userSchema = new Schema(
         gender: {
             type: String,
             enum: sex,
-            default: "mail",
+            default: "man",
         },
         waterRate: {
             type: Number,
-            default: 0
+            default: 2000
         },
-        token: String,
-        avatarURL: String,
-        verify: {
-            type: Boolean,
-            default: false,
-        },
-        verificationToken: {
+        token: {
             type: String,
-            required: true,
         },
-    })
+        avatarURL:  {
+            type: String,
+        },
+        forgotPasswordToken: {
+            type: String,
+            default: null,
+          },
+    },
+    { versionKey: false, timestamps: true }
+    )
 
 
 userSchema.post("save", handleSaveError);
@@ -55,7 +57,7 @@ export const authRegisterForm = Joi.object({
     name: Joi.string().min(1).max(32).required(),
     password: Joi.string().min(8).max(64).required(),
     email: Joi.string().pattern(emailRegexp).required(),
-    gender: Joi.string().valid(...sex).default("mail"),
+    gender: Joi.string().valid(...sex).default("man"),
     waterRate: Joi.number().default(0),
     token: Joi.string(),
 });
@@ -63,15 +65,14 @@ export const authRegisterForm = Joi.object({
 export const authLoginSchema = Joi.object({
     password: Joi.string().min(8).max(64).required(),
     email: Joi.string().pattern(emailRegexp).required(),
-    token: Joi.string(),
 });
 
 export const userUpdateSchema = Joi.object({
     name: Joi.string().min(1).max(32),
     email: Joi.string().pattern(emailRegexp),
-    gender: Joi.string().valid(...sex).default("mail"),
+    gender: Joi.string().valid(...sex).default("man"),
     waterRate: Joi.number().min(1).max(15000),
-})
+    })
 
 export const userInfoSchema = Joi.object({
     email: Joi.string().pattern(emailRegexp),
