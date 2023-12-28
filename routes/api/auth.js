@@ -13,9 +13,5 @@ authRouter.post("/login", isEmptyBody, validateBody(authLoginSchema), authContro
 
 authRouter.post("/logout", authenticate, authController.logout);
 
-authRouter.get("/verify/:verificationToken", authController.verify);
-
-authRouter.post("/verify", isEmptyBody, validateBody(userEmailSchema), authController.resendVarify)
-
 
 export default  authRouter;
