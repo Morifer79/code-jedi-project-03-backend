@@ -193,7 +193,7 @@
         }
       },
       "patch": {
-        "tags": ["User"],
+        "tags": ["Users"],
         "summary": "Update user information",
         "security": [{ "Bearer": [] }],
         "parameters": [
