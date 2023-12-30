@@ -10,14 +10,14 @@ const consumedWaterRouter = express.Router();
 
  consumedWaterRouter.use(authenticate);
 
-consumedWaterRouter.get('/today/:day/:month', consumedWater_controller.getAllСonsumedWaterToday);
+consumedWaterRouter.get('/today/:date/:month', consumedWater_controller.getAllConsumedWaterToday);
 
-consumedWaterRouter.get('/month/:month', consumedWater_controller.getAllСonsumedWaterMonth);
+consumedWaterRouter.get('/month/:month', consumedWater_controller.getAllConsumedWaterMonth);
 
-consumedWaterRouter.post('/today', isEmptyBody, validateBody(addConsumedWaterSchema), consumedWater_controller.addСonsumedWater);
+consumedWaterRouter.post('/today', isEmptyBody, validateBody(addConsumedWaterSchema), consumedWater_controller.addConsumedWater);
 
-consumedWaterRouter.put('/today/:consumedWaterId', isValidId, isEmptyBody, validateBody(updateConsumedWaterSchema), consumedWater_controller.updateСonsumedWaterId);
+consumedWaterRouter.put('/today/:consumedWaterId', isValidId, isEmptyBody, validateBody(updateConsumedWaterSchema), consumedWater_controller.updateConsumedWaterId);
 
-consumedWaterRouter.delete('/today/:consumedWaterId', isValidId, consumedWater_controller.deleteСonsumedWaterId)
+consumedWaterRouter.delete('/today/:consumedWaterId', isValidId, consumedWater_controller.deleteConsumedWaterId)
 
 export default consumedWaterRouter;

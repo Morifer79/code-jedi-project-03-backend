@@ -91,6 +91,11 @@ export const userEmailSchema = Joi.object({
 })
 
 export const userChangePasswordSchema = Joi.object({
+    password: Joi.string().min(8).max(64).required(),
+    newPassword: Joi.string().min(8).max(64).required(),
+})
+
+export const userForgotPasswordSchema = Joi.object({
     password: Joi.string().min(8).max(64).required()
 })
 

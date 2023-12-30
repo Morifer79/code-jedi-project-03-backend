@@ -5,7 +5,8 @@ import {authenticate, isEmptyBody,upload} from "../../middlewares/index.js";
 import {userInfoSchema, 
   userUpdateSchema, 
   userNormWaterSchema, 
-  userChangePasswordSchema
+  userChangePasswordSchema,
+  userForgotPasswordSchema
 } from "../../db/models/User.js";
 
 const userRouter = express.Router();
@@ -22,6 +23,6 @@ userRouter.patch("/:userId/changePassword", authenticate, isEmptyBody, validateB
 
 userRouter.post("/forgotPassword", isEmptyBody, userController.forgotPassword);
 
-userRouter.post("/resetPassword/:forgotPasswordToken", isEmptyBody, validateBody(userChangePasswordSchema), userController.resetPassword);
+userRouter.post("/resetPassword/:forgotPasswordToken", isEmptyBody, validateBody(userForgotPasswordSchema), userController.resetPassword);
 
 export default userRouter;
