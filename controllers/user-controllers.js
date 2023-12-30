@@ -72,7 +72,13 @@ const updateWaterNorm = async (req, res) => {
 const changePassword = async (req, res, next) => {
   const { _id } = req.user;
   const user = await User.findById({ _id });
-  const { password: newPassword } = req.body;
+  const { password, newPassword} = req.body;
+  const compareCurrentPassword = await bcrypt.compare(password, user.password);
+
+  if (!compareCurrentPassword) {
+    throw HttpError(401, "This password is wrong!")
+  }
+  
   const comparePassword = await bcrypt.compare(newPassword, user.password);
   if (comparePassword) {
     throw HttpError(401, "This Password is your current password")
