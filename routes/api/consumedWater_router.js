@@ -16,7 +16,7 @@ consumedWaterRouter.get('/month/:month', consumedWater_controller.getAllConsumed
 
 consumedWaterRouter.post('/today', isEmptyBody, validateBody(addConsumedWaterSchema), consumedWater_controller.addConsumedWater);
 
-consumedWaterRouter.put('/today/:consumedWaterId', isValidId, isEmptyBody, validateBody(updateConsumedWaterSchema), consumedWater_controller.updateConsumedWaterId);
+consumedWaterRouter.patch('/today/:consumedWaterId', isValidId, isEmptyBody, validateBody(updateConsumedWaterSchema), consumedWater_controller.updateConsumedWaterId);
 
 consumedWaterRouter.delete('/today/:consumedWaterId', isValidId, consumedWater_controller.deleteConsumedWaterId)
 

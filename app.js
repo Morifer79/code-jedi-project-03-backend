@@ -4,8 +4,7 @@ import logger from 'morgan';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import fs from 'fs';
-// import waterRouter from "./routes/api/water_router.js";
-// import userRouter from "./routes/api/user_router.js";
+
 
 import consumedWaterRouter from './routes/api/consumedWater_router.js';
 import userRouter from "./routes/api/users.js";
