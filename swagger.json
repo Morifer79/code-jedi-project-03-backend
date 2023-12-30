@@ -11,7 +11,7 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:8000" }],
+  "servers": [{ "url": "https://water-tracker-back-end.onrender.com/" }],
   "tags": [
     {
       "name": "UserAuth",
@@ -25,7 +25,7 @@
     { "name": "WaterMonth", "description": "WaterMonth-related endpoints" }
   ],
   "paths": {
-    "/users/register": {
+    "/auth/register": {
       "post": {
         "tags": ["UserAuth"],
         "summary": "UserAuth registration",
@@ -63,7 +63,7 @@
         }
       }
     },
-    "/users/login": {
+    "/auth/login": {
       "post": {
         "tags": ["UserAuth"],
         "summary": "UserAuth login",
@@ -97,7 +97,7 @@
         }
       }
     },
-    "/users/logout": {
+    "/auth/logout": {
       "post": {
         "tags": ["UserAuth"],
         "summary": "UserAuth logout",
@@ -255,13 +255,19 @@
               "type": "object",
               "properties": {
                 "password": {
-                  "password": {
-                    "type": "string",
-                    "description": "User's password",
-                    "minLength": 8,
-                    "maxLength": 64,
-                    "example": "qwerty123"
-                  }
+                  "type": "string",
+                  "description": "User's password",
+                  "minLength": 8,
+                  "maxLength": 64,
+                  "example": "qwerty123"
+                },
+
+                "newPassword": {
+                  "type": "string",
+                  "description": "User's password",
+                  "minLength": 8,
+                  "maxLength": 64,
+                  "example": "qwerty123"
                 }
               }
             }
@@ -431,9 +437,9 @@
         }
       }
     },
-    "/water/today": {
+    "/consumedWater/today": {
       "post": {
-        "tags": ["WaterToday"],
+        "tags": ["ConsumedWaterToday"],
         "summary": "Save water consumption information",
         "security": [{ "Bearer": [] }],
         "requestBody": {
@@ -465,9 +471,9 @@
         }
       }
     },
-    "/water/today/{day}/{month}": {
+    "/consumedWater/today/{date}/{month}": {
       "get": {
-        "tags": ["WaterToday"],
+        "tags": ["ConsumedWaterToday"],
         "summary": "Get water consumption information for today",
         "parameters": [
           {
@@ -523,9 +529,9 @@
         }
       }
     },
-    "/water/today/{consumedWaterId}": {
+    "/consumedWater/today/{consumedWaterId}": {
       "patch": {
-        "tags": ["WaterToday"],
+        "tags": ["ConsumedWaterToday"],
         "summary": "Edit water consumption record",
         "security": [{ "Bearer": [] }],
         "parameters": [
@@ -572,7 +578,7 @@
         }
       },
       "delete": {
-        "tags": ["WaterToday"],
+        "tags": ["ConsumedWaterToday"],
         "summary": "Delete water consumption record",
         "security": [{ "Bearer": [] }],
         "parameters": [
@@ -598,9 +604,9 @@
         }
       }
     },
-    "/water/month/{month}": {
+    "/consumedWater/month/{month}": {
       "get": {
-        "tags": ["WaterMonth"],
+        "tags": ["ConsumedWaterMonth"],
         "summary": "Get water consumption information for each day in the selected month",
         "security": [{ "Bearer": [] }],
         "parameters": [
@@ -832,7 +838,7 @@
           "waterRate": {
             "type": "number",
             "description": "Updated daily water consumption goal for the user",
-            "minimum": 0,
+            "minimum": 1,
             "maximum": 15000
           }
         }

@@ -3,8 +3,9 @@ import { handleSaveError, preUpdate } from "./hooks.js";
 import Joi from "joi";
 
 const consumedWaterSchema = new Schema({
-  amount: {
+  waterVolume: {
     type: Number,
+    min: 1,
     max: 5000
   },
   time: {
@@ -23,10 +24,10 @@ const consumedWaterSchema = new Schema({
   percent: {
     type: Number
   },
-//   owner: {
-//     type: Schema.Types.ObjectId,
-//     ref: 'user',
-//   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  },
 },
   { versionKey: false, timestamps: true }
 )
@@ -38,19 +39,19 @@ consumedWaterSchema.post("findOneAndUpdate", handleSaveError);
 export const consumedWater = model("consumedWater", consumedWaterSchema);
 
 export const addConsumedWaterSchema = Joi.object({
-  amount: Joi.number().required().messages({ "any.required": "missing required amount field" }),
+  waterVolume: Joi.number().required().messages({ "any.required": "missing required amount field" }),
   time: Joi.string().required().messages({ "any.required": "missing required time field" }),
   date: Joi.number().required().messages({ "any.required": "missing required date field" }),
   month: Joi.string().required().messages({ "any.required": "missing required month field" }),
-  percent:Joi.number().required().messages({ "any.required": "missing required month field" }),
+  percent: Joi.number().required().messages({ "any.required": "missing required month field" }),
 })
 
 export const updateConsumedWaterSchema = Joi.object({
-  amount: Joi.number(),
+  waterVolume: Joi.number(),
   time: Joi.string(),
   date: Joi.number(),
   month: Joi.string(),
-  percent:Joi.number()
+  percent: Joi.number()
 
 })
 
