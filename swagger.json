@@ -115,9 +115,9 @@
       }
     },
     "/users/avatar": {
-      "patch": {
+      "post": {
         "tags": ["Users"],
-        "summary": "Add or update user avatar",
+        "summary": "Add user avatar",
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "User avatar image",
@@ -138,7 +138,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful operation",
             "content": {
               "application/json": {
@@ -147,14 +147,8 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {}
           }
-        }
-      }
-    },
+        },
     "/users/{userId}": {
       "get": {
         "tags": ["Users"],
@@ -994,4 +988,6 @@
       }
     }
   }
+}
+}
 }
