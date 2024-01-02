@@ -4,35 +4,48 @@ import fs from "fs/promises";
 import path from "path";
 import Jimp from 'jimp';
 import { ctrlWrapper } from "../decorators/index.js";
-import { HttpError, sendEmail } from "../helpers/index.js";
+import { HttpError, sendEmail, cloudinary } from "../helpers/index.js";
 import { nanoid } from "nanoid";
 import bcrypt from "bcryptjs";
 
 const { BASE_URL } = process.env;
 
+// const updateAvatar = async (req, res) => {
+//   const { _id } = req.user;
+//   if (!req.file) {
+//     throw HttpError(400, 'no download file');
+//   }
+
+//   // const { path: oldPath} = req.file;
+
+//   // (await Jimp.read(oldPath)).resize(250, 250).write(oldPath);
+//   // await pic
+//   //   .autocrop()
+//   //   .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE)
+//   //   .writeAsync(oldPath);
+
+//   // const newPath = path.join(avatarsPath, filename);
+//   // await fs.rename(oldPath, newPath);
+//   // const avatarURL = path.join('avatars', filename);
+
+//   // await User.findByIdAndUpdate(_id, { avatarURL });
+
+//   res.json({
+//     avatarURL,
+//   });
+// };
+
 const updateAvatar = async (req, res) => {
-  const { _id } = req.user;
-  if (!req.file) {
-    throw HttpError(400, 'no download file');
-  }
-
-  const { path: oldPath, filename } = req.file;
-
-  (await Jimp.read(oldPath)).resize(250, 250).write(oldPath);
-  // await pic
-  //   .autocrop()
-  //   .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE)
-  //   .writeAsync(oldPath);
-
-  const newPath = path.join(avatarsPath, filename);
-  await fs.rename(oldPath, newPath);
-  const avatarURL = path.join('avatars', filename);
-  await User.findByIdAndUpdate(_id, { avatarURL });
-
-  res.json({
-    avatarURL,
+  const {_id: owner} = req.user;
+  const {url: avatarURL} = await cloudinary.uploader.upload(req.file.path, {
+      folder: "avatars",
   });
-};
+  await fs.unlink(req.file.path);
+
+  const result = await User.create({...req.body, avatarURL, owner});
+
+  res.status(201).json(result);
+}
 
 
 const currentUser = async (req, res) => {
