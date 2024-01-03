@@ -14,21 +14,27 @@
   "servers": [{ "url": "https://water-tracker-back-end.onrender.com/" }],
   "tags": [
     {
-      "name": "UserAuth",
+      "name": "Users Auth",
       "description": "Registration and authentication endpoints"
     },
     {
       "name": "Users",
       "description": "User's endpoints"
     },
-    { "name": "WaterToday", "description": "WaterToday-related endpoints" },
-    { "name": "WaterMonth", "description": "WaterMonth-related endpoints" }
+    {
+      "name": "Consumed Water Today",
+      "description": "WaterToday-related endpoints"
+    },
+    {
+      "name": "Consumed Water Month",
+      "description": "WaterMonth-related endpoints"
+    }
   ],
   "paths": {
     "/auth/register": {
       "post": {
-        "tags": ["UserAuth"],
-        "summary": "UserAuth registration",
+        "tags": ["Users Auth"],
+        "summary": "User Auth registration",
         "parameters": [],
         "requestBody": {
           "description": "Registration's object",
@@ -65,8 +71,8 @@
     },
     "/auth/login": {
       "post": {
-        "tags": ["UserAuth"],
-        "summary": "UserAuth login",
+        "tags": ["Users Auth"],
+        "summary": "User Auth login",
         "parameters": [],
         "requestBody": {
           "description": "Login credentials",
@@ -99,8 +105,8 @@
     },
     "/auth/logout": {
       "post": {
-        "tags": ["UserAuth"],
-        "summary": "UserAuth logout",
+        "tags": ["Users Auth"],
+        "summary": "User Auth logout",
         "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
@@ -240,7 +246,7 @@
         }
       }
     },
-    "/users/changePassword": {
+    "/users/change-password": {
       "patch": {
         "tags": ["Users"],
         "summary": "Change user's password",
@@ -294,8 +300,8 @@
         }
       }
     },
-    "/users/forgotPassword": {
-      "patch": {
+    "/users/forgot-password": {
+      "post": {
         "tags": ["Users"],
         "summary": "Send forgot password email",
         "parameters": [
@@ -337,54 +343,7 @@
         }
       }
     },
-    "/users/resetPassword/{forgotPasswordToken}": {
-      "patch": {
-        "tags": ["Users"],
-        "summary": "Change user's password",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "description": "Request body containing the new password",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "password": {
-                  "password": {
-                    "type": "string",
-                    "description": "User's password",
-                    "minLength": 8,
-                    "maxLength": 64,
-                    "example": "qwerty123"
-                  }
-                }
-              }
-            }
-          }
-        ],
-
-        "responses": {
-          "200": {
-            "description": "Password changed successful",
-            "content": {}
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {}
-          },
-          "404": {
-            "description": "User not found",
-            "content": {}
-          },
-          "400": {
-            "description": "Bad request (invalid password)",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/users/waterRate": {
+    "/users/water-rate": {
       "patch": {
         "tags": ["Users"],
         "summary": "Update user's daily water norm goal",
@@ -437,9 +396,9 @@
         }
       }
     },
-    "/consumedWater/today": {
+    "/consumed-water/today": {
       "post": {
-        "tags": ["ConsumedWaterToday"],
+        "tags": ["Consumed Water Today"],
         "summary": "Save water consumption information",
         "security": [{ "Bearer": [] }],
         "requestBody": {
@@ -471,9 +430,9 @@
         }
       }
     },
-    "/consumedWater/today/{date}/{month}": {
+    "/consumed-water/today/{date}/{month}": {
       "get": {
-        "tags": ["ConsumedWaterToday"],
+        "tags": ["Consumed Water Today"],
         "summary": "Get water consumption information for today",
         "parameters": [
           {
@@ -529,9 +488,9 @@
         }
       }
     },
-    "/consumedWater/today/{consumedWaterId}": {
-      "patch": {
-        "tags": ["ConsumedWaterToday"],
+    "/consumed-water/today/{consumedWaterId}": {
+      "put": {
+        "tags": ["Consumed Water Today"],
         "summary": "Edit water consumption record",
         "security": [{ "Bearer": [] }],
         "parameters": [
@@ -578,7 +537,7 @@
         }
       },
       "delete": {
-        "tags": ["ConsumedWaterToday"],
+        "tags": ["Consumed Water Today"],
         "summary": "Delete water consumption record",
         "security": [{ "Bearer": [] }],
         "parameters": [
@@ -604,9 +563,9 @@
         }
       }
     },
-    "/consumedWater/month/{month}": {
+    "/consumed-water/month/{month}": {
       "get": {
-        "tags": ["ConsumedWaterMonth"],
+        "tags": ["Consumed Water Month"],
         "summary": "Get water consumption information for each day in the selected month",
         "security": [{ "Bearer": [] }],
         "parameters": [
@@ -849,7 +808,7 @@
           "waterVolume": {
             "type": "number",
             "description": "Amount of water consumed in milliliters",
-            "minimum": 0,
+            "minimum": 1,
             "maximum": 5000
           },
           "time": {
@@ -897,7 +856,7 @@
           "waterVolume": {
             "type": "number",
             "description": "Updated amount of water consumed in milliliters",
-            "minimum": 0,
+            "minimum": 1,
             "maximum": 5000
           },
           "time": {
@@ -912,37 +871,12 @@
           "waterVolume": {
             "type": "number",
             "description": "Amount of water consumed in milliliters",
-            "minimum": 0,
+            "minimum": 1,
             "maximum": 5000
           },
           "time": {
             "type": "string",
             "description": "Time when water was consumed"
-          },
-          "date": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 31
-          },
-          "month": {
-            "type": "string",
-            "enum": [
-              "January",
-              "February",
-              "March",
-              "April",
-              "May",
-              "June",
-              "July",
-              "August",
-              "September",
-              "October",
-              "November",
-              "December"
-            ]
-          },
-          "percent": {
-            "type": "number"
           }
         }
       },

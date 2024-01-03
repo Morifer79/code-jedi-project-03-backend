@@ -5,8 +5,13 @@ import path from "path";
 import Jimp from 'jimp';
 import { ctrlWrapper } from "../decorators/index.js";
 import { HttpError, sendEmail, cloudinary } from "../helpers/index.js";
-import { nanoid } from "nanoid";
 import bcrypt from "bcryptjs";
+import generator from 'generate-password';
+
+const generatePassword = generator.generate({
+  length: 10,
+  numbers: true
+});
 
 const { BASE_URL } = process.env;
 
@@ -85,13 +90,13 @@ const updateWaterNorm = async (req, res) => {
 const changePassword = async (req, res, next) => {
   const { _id } = req.user;
   const user = await User.findById({ _id });
-  const { password, newPassword} = req.body;
+  const { password, newPassword } = req.body;
   const compareCurrentPassword = await bcrypt.compare(password, user.password);
 
   if (!compareCurrentPassword) {
     throw HttpError(401, "This password is wrong!")
   }
-  
+
   const comparePassword = await bcrypt.compare(newPassword, user.password);
   if (comparePassword) {
     throw HttpError(401, "This Password is your current password")
@@ -102,10 +107,10 @@ const changePassword = async (req, res, next) => {
 }
 
 
-const forgotPasswordEmail = (email, forgotPasswordToken) => ({
+const forgotPasswordEmail = (email, generatePassword) => ({
   to: email,
-  subject: "Confirm password change",
-  html: `<a target="_blank" href="${BASE_URL}/users/resetPassword/${forgotPasswordToken}"><button>Click here for update your password</button></a>`
+  subject: "You get a new password",
+  html: `<p>${generatePassword}</p><br/><a target="_blank" href="https://localhost:3000/singin"><button>Go to Singin page</button></a>`
 });
 
 const forgotPassword = async (req, res, next) => {
@@ -117,14 +122,14 @@ const forgotPassword = async (req, res, next) => {
   if (!user) {
     throw HttpError(404, "User not found")
   }
-  const forgotPasswordToken = nanoid();
-  await User.findByIdAndUpdate(user._id, { forgotPasswordToken });
-  await sendEmail(forgotPasswordEmail(email, forgotPasswordToken));
+  const hashNewPassword = await bcrypt.hash(generatePassword, 10);
+  await User.findByIdAndUpdate(user._id, { password: hashNewPassword });
+  await sendEmail(forgotPasswordEmail(email, generatePassword));
 
   res.status(200).json({ message: "Please, check your email" });
 }
 
-
+/*
 const resetPassword = async (req, res) => {
   const { forgotPasswordToken } = req.params;
   const user = await User.findOne({ forgotPasswordToken });
@@ -140,7 +145,7 @@ const resetPassword = async (req, res) => {
   await User.findByIdAndUpdate(user._id, { password: hashNewPassword, forgotPasswordToken: "" });
   res.json({ message: "Password changed successful" });
 }
-
+*/
 
 export default {
   updateAvatar: ctrlWrapper(updateAvatar),
@@ -148,6 +153,5 @@ export default {
   updateUser: ctrlWrapper(updateUser),
   updateWaterNorm: ctrlWrapper(updateWaterNorm),
   changePassword: ctrlWrapper(changePassword),
-  forgotPassword: ctrlWrapper(forgotPassword),
-  resetPassword: ctrlWrapper(resetPassword)
+  forgotPassword: ctrlWrapper(forgotPassword)
 };
