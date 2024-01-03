@@ -11,7 +11,7 @@ import {userInfoSchema,
 
 const userRouter = express.Router();
 
-userRouter.post("/avatar", authenticate, upload.single("avatarURL"), userController.updateAvatar);
+userRouter.patch("/avatar", authenticate, upload.single("avatarURL"), userController.updateAvatar);
 
 userRouter.get("/:userId", authenticate, validateBody(userInfoSchema), userController.currentUser);
 
