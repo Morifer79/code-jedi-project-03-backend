@@ -11,7 +11,7 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "https://localhost:8000/" }],
+  "servers": [{ "url": "https://water-tracker-back-end.onrender.com/" }],
   "tags": [
     {
       "name": "Users Auth",
