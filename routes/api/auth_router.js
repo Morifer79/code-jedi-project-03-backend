@@ -7,9 +7,9 @@ import { authLoginSchema, authRegisterForm, userEmailSchema} from "../../db/mode
 
 const authRouter = express.Router();
 
-authRouter.post("/singup", isEmptyBody, validateBody(authRegisterForm), authController.register);
+authRouter.post("/register", isEmptyBody, validateBody(authRegisterForm), authController.register);
 
-authRouter.post("/singin", isEmptyBody, validateBody(authLoginSchema), authController.login);
+authRouter.post("/login", isEmptyBody, validateBody(authLoginSchema), authController.login);
 
 authRouter.post("/logout", authenticate, authController.logout);
 

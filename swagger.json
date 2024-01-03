@@ -31,7 +31,7 @@
     }
   ],
   "paths": {
-    "/auth/singup": {
+    "/auth/register": {
       "post": {
         "tags": ["Users Auth"],
         "summary": "User Auth registration",
@@ -69,7 +69,7 @@
         }
       }
     },
-    "/auth/singin": {
+    "/auth/login": {
       "post": {
         "tags": ["Users Auth"],
         "summary": "User Auth login",
@@ -326,53 +326,6 @@
         "responses": {
           "200": {
             "description": "Please, check your email",
-            "content": {}
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {}
-          },
-          "404": {
-            "description": "User not found",
-            "content": {}
-          },
-          "400": {
-            "description": "Bad request (invalid password)",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/users/reset-password/{forgotPasswordToken}": {
-      "patch": {
-        "tags": ["Users"],
-        "summary": "Change user's password",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "description": "Request body containing the new password",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "password": {
-                  "password": {
-                    "type": "string",
-                    "description": "User's password",
-                    "minLength": 8,
-                    "maxLength": 64,
-                    "example": "qwerty123"
-                  }
-                }
-              }
-            }
-          }
-        ],
-
-        "responses": {
-          "200": {
-            "description": "Password changed successful",
             "content": {}
           },
           "401": {
