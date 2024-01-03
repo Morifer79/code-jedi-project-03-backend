@@ -8,8 +8,8 @@ import fs from 'fs';
 // import userRouter from "./routes/api/user_router.js";
 
 import consumedWaterRouter from './routes/api/consumedWater_router.js';
-import userRouter from "./routes/api/users.js";
-import authRouter from "./routes/api/auth.js";
+import userRouter from "./routes/api/users_router.js";
+import authRouter from "./routes/api/auth_router.js";
 
 
 const swaggerJson = JSON.parse(
@@ -34,7 +34,7 @@ app.use(
 
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
-app.use("/consumedWater", consumedWaterRouter);
+app.use("/consumed-water", consumedWaterRouter);
 
 
 app.use((req, res) => {

@@ -4,10 +4,8 @@ import { consumedWater } from "../db/models/consumedWater.js";
 
 const getAllConsumedWaterToday = async (req, res) => {
   const { date, month } = req.params;
-  console.log(date);
-  console.log(month);
   const { _id: owner } = req.user;
-  st = await consumedWater.find({ owner, date, month }, "amount time")
+  const allWaterList = await consumedWater.find({ owner, date, month }, "waterVolume time -_id")
 
   res.json(allWaterList);
 }
@@ -18,18 +16,15 @@ const getAllConsumedWaterMonth = async (req, res) => {
   const { _id: owner } = req.user;
   const allConsumedWaterList = await consumedWater.aggregate([
     {
-      $match: { month: `${month}`, owner: `${owner}` }
+      $match: { month, owner }
     },
 
     {
-
       $group: {
         _id: "$date",
         totalProcent: { $sum: "$percent" },
         count: { $sum: 1 }
-
       },
-
     },
     {
       $project: {
@@ -40,9 +35,6 @@ const getAllConsumedWaterMonth = async (req, res) => {
         numOfWaterRecords: "$count"
       }
     },
-
-
-
   ]);
   res.json(allConsumedWaterList);
 }
