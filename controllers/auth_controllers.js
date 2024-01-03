@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 import gravatar from 'gravatar';
 import path from "path";
-import { nanoid } from "nanoid";
 import { ctrlWrapper } from "../decorators/index.js";
 import { HttpError } from "../helpers/index.js";
 
