@@ -27,6 +27,8 @@ const userSchema = new Schema(
         },
         waterRate: {
             type: Number,
+            min: 1,
+            max: 15000,
             default: 2000
         },
         token: {
@@ -34,11 +36,7 @@ const userSchema = new Schema(
         },
         avatarURL:  {
             type: String,
-        },
-        forgotPasswordToken: {
-            type: String,
-            default: null,
-          },
+        }
     },
     { versionKey: false, timestamps: true }
     )
@@ -93,10 +91,6 @@ export const userEmailSchema = Joi.object({
 export const userChangePasswordSchema = Joi.object({
     password: Joi.string().min(8).max(64).required(),
     newPassword: Joi.string().min(8).max(64).required(),
-})
-
-export const userForgotPasswordSchema = Joi.object({
-    password: Joi.string().min(8).max(64).required()
 })
 
 export default User;

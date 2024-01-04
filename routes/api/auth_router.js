@@ -1,5 +1,5 @@
 import express from "express";
-import authController from "../../controllers/auth-controllers.js"
+import authController from "../../controllers/auth_controllers.js"
 import {validateBody} from "../../decorators/index.js";
 import {authenticate, isEmptyBody} from "../../middlewares/index.js";
 import { authLoginSchema, authRegisterForm, userEmailSchema} from "../../db/models/User.js";
