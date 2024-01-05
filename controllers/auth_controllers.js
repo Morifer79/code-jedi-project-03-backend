@@ -54,6 +54,8 @@ const login = async (req, res) => {
     user: {
       name: user.name,
       email,
+      userId: user._id,
+      waterRate: user.waterRate
     },
   });
 };
