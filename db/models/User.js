@@ -52,7 +52,7 @@ const User = model("user", userSchema);
 
 
 export const authRegisterForm = Joi.object({
-    name: Joi.string().min(1).max(32).required(),
+    name: Joi.string().min(1).max(32),
     password: Joi.string().min(8).max(64).required(),
     email: Joi.string().pattern(emailRegexp).required(),
     gender: Joi.string().valid(...sex).default("man"),
