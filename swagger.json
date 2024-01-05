@@ -706,9 +706,13 @@
                 "type": "string",
                 "format": "email",
                 "description": "User's email address"
+              },
+              "waterRate": {
+                "type": "number",
+                "description": "User's daily water consumption goal"
               }
             },
-            "required": ["name", "email"]
+            "required": ["name", "email", "waterRate"]
           }
         },
         "required": ["token", "user"]
