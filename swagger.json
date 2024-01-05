@@ -706,9 +706,18 @@
                 "type": "string",
                 "format": "email",
                 "description": "User's email address"
+              },
+              "userId": {
+                "type": "string",
+                "description": "User's id",
+                "example": "6566f0735775c3f350f806d3"
+              },
+              "waterRate": {
+                "type": "number",
+                "description": "User's daily water consumption goal"
               }
             },
-            "required": ["name", "email"]
+            "required": ["name", "email", "waterRate"]
           }
         },
         "required": ["token", "user"]
