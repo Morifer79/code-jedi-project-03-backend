@@ -1,4 +1,3 @@
-import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 import { consumedWater } from "../db/models/consumedWater.js";
 
@@ -51,7 +50,10 @@ const updateConsumedWaterId = async (req, res) => {
   const { _id: owner } = req.user;
   const updateConsumedWater = await consumedWater.findByIdAndUpdate({ _id: consumedWaterId, owner }, req.body);
   if (!updateConsumedWater) {
-    throw HttpError(404, `Water record with id=${consumedWaterId} not found`);
+       res.status(404).json({
+  message: `Water record with id=${consumedWaterId} not found`,
+});
+return;
   }
   res.json(updateConsumedWater);
 }
@@ -62,7 +64,10 @@ const deleteConsumedWaterId = async (req, res) => {
   const { _id: owner } = req.user;
   const removeConsumedWaterRecord = await consumedWater.findOneAndDelete({ _id: consumedWaterId, owner })
   if (!removeConsumedWaterRecord) {
-    throw HttpError(404, `Water record with id=${consumedWaterId} not found`);
+       res.status(404).json({
+  message: `Water record with id=${consumedWaterId} not found`,
+});
+return;
   }
   res.json({ message: "Deleted success" });
 }

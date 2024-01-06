@@ -5,7 +5,6 @@ import "dotenv/config";
 import gravatar from 'gravatar';
 import path from "path";
 import { ctrlWrapper } from "../decorators/index.js";
-import { HttpError } from "../helpers/index.js";
 
 const { JWT_SECRET } = process.env;
 
@@ -17,7 +16,10 @@ const register = async (req, res) => {
   const { name, email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
-    throw HttpError(409, "Email in use");
+   res.status(409).json({
+  message: "Email already in use",
+});
+return;
   }
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
@@ -36,12 +38,18 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    throw HttpError(401, "Email or password is wrong");
+   res.status(401).json({
+  message: "Email or password is wrong",
+});
+return;
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
-    throw HttpError(401, "Email or password is wrong");
+    res.status(401).json({
+      message: "Email or password is wrong",
+    });
+    return;
   }
   const payload = {
     id: user._id,

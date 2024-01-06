@@ -4,7 +4,7 @@ import fs from "fs/promises";
 import path from "path";
 import Jimp from 'jimp';
 import { ctrlWrapper } from "../decorators/index.js";
-import { HttpError, sendEmail, cloudinary } from "../helpers/index.js";
+import {sendEmail, cloudinary } from "../helpers/index.js";
 import bcrypt from "bcryptjs";
 import generator from 'generate-password';
 
@@ -66,7 +66,7 @@ const updateUser = async (req, res) => {
   const { _id } = req.user;
   const updateUserInfo = req.body;
   const updateUser = await User.findByIdAndUpdate(_id, updateUserInfo);
-
+ 
   if (!updateUser) {
     return res.status(404).json({ error: `User not found` })
   }
@@ -94,12 +94,18 @@ const changePassword = async (req, res, next) => {
   const compareCurrentPassword = await bcrypt.compare(password, user.password);
 
   if (!compareCurrentPassword) {
-    throw HttpError(401, "This password is wrong!")
+       res.status(401).json({
+  message: "This password is wrong!",
+});
+return;
   }
 
   const comparePassword = await bcrypt.compare(newPassword, user.password);
   if (comparePassword) {
-    throw HttpError(401, "This Password is your current password")
+       res.status(401).json({
+  message: "This Password is your current password",
+});
+return;
   }
   const hashNewPassword = await bcrypt.hash(newPassword, 10);
   await User.findByIdAndUpdate(_id, { password: hashNewPassword });
@@ -116,11 +122,14 @@ const forgotPasswordEmail = (email, generatePassword) => ({
 const forgotPassword = async (req, res, next) => {
   const { email } = req.body;
   if (!email) {
-    throw HttpError(400, "missing email")
+    res.status(400).json({
+      message: "missing email",
+    });
+    return;
   }
   const user = await User.findOne({ email });
   if (!user) {
-    throw HttpError(404, "User not found")
+    return res.status(404).json({ error: `User not found` })
   }
   const hashNewPassword = await bcrypt.hash(generatePassword, 10);
   await User.findByIdAndUpdate(user._id, { password: hashNewPassword });
