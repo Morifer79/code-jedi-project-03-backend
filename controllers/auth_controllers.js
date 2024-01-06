@@ -6,7 +6,6 @@ import gravatar from 'gravatar';
 import path from "path";
 import { ctrlWrapper } from "../decorators/index.js";
 
-
 const { JWT_SECRET } = process.env;
 
 

@@ -1,4 +1,3 @@
-import { HttpError } from "../helpers/index.js";
 import jwt from "jsonwebtoken";
 import {ctrlWrapper} from "../decorators/index.js";
 const {JWT_SECRET} = process.env;
@@ -9,22 +8,34 @@ import User from "../db/models/User.js"
 const authenticate = async (req, res, next) => {
     const { authorization } = req.headers;
     if (!authorization) {
-        throw HttpError(401, "'Not authorized'");
+       res.status(401).json({
+  message: 'Not authorized',
+});
+return;
     }
     const [bearer, token] = authorization.split(" ");
     if (bearer !== "Bearer" || !token) {
-    throw HttpError(401, 'Not authorized');
+       res.status(401).json({
+  message: 'Not authorized',
+});
+return;
 }
 try {
     const { id } = jwt.verify(token, JWT_SECRET);
     const user = await User.findById(id);
     if (!user || !user.token || user.token !== token) {
-        throw HttpError(401, "user not found");
+        res.status(401).json({
+            message: "user not found",
+          });
+          return;
     }
     req.user = user;
     next();
 } catch (error) {
-    throw HttpError(401, 'Not authorized');
+   res.status(401).json({
+  message: 'Not authorized',
+});
+return;
 }
 }
 
