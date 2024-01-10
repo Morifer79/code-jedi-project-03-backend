@@ -47,7 +47,7 @@ const updateAvatar = async (req, res) => {
   });
   await fs.unlink(req.file.path);
 
-  const result = await User.create({...req.body, avatarURL, owner});
+  const result = await User.findByIdAndUpdate({...req.body, avatarURL, owner});
 
   res.status(201).json(result);
 }
