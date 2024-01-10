@@ -68,14 +68,16 @@ export const authLoginSchema = Joi.object({
 export const userUpdateSchema = Joi.object({
     name: Joi.string().min(1).max(32),
     email: Joi.string().pattern(emailRegexp),
-    gender: Joi.string().valid(...sex).default("man"),
+    avatarURL: Joi.string(),
     waterRate: Joi.number().min(1).max(15000),
+    password: Joi.string().min(8).max(64),
+    newPassword: Joi.string().min(8).max(64),
     })
 
 export const userInfoSchema = Joi.object({
     email: Joi.string().pattern(emailRegexp),
     password: Joi.string().min(8).max(64),
-    oldPassword: Joi.string().min(8).max(64),
+    waterRate: Joi.number().min(1).max(15000),
     gender: Joi.string().valid(...sex),
     name: Joi.string().min(1).max(32),
 });
@@ -86,11 +88,6 @@ export const userNormWaterSchema = Joi.object({
 
 export const userEmailSchema = Joi.object({
     email: Joi.string().pattern(emailRegexp).required().messages({ "any.required": "missing required field email" }),
-})
-
-export const userChangePasswordSchema = Joi.object({
-    password: Joi.string().min(8).max(64).required(),
-    newPassword: Joi.string().min(8).max(64).required(),
 })
 
 export default User;
